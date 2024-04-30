@@ -1,9 +1,10 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, URL
 import csv
+
 
 '''
 Red underlines? Install the required packages first: 
@@ -20,11 +21,17 @@ This will install the packages from requirements.txt for this project.
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-Bootstrap5(app)
+Bootstrap(app)
 
 
 class CafeForm(FlaskForm):
-    cafe = StringField('Cafe name', validators=[DataRequired()])
+    name = StringField('Cafe name', validators=[DataRequired()])
+    location = StringField('location', validators=[URL()])
+    open_time = StringField('Opening Time e.g 8AM', validators=[DataRequired()])
+    close_time = StringField('Closing Time e.g 5:30PM', validators=[DataRequired()])
+    coffee = StringField('Coffee Rating', validators=[DataRequired()])
+    wifi = StringField('Wifi Strength Rating', validators=[DataRequired()])
+    power = StringField('Power Socket Availability', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 # Exercise:
