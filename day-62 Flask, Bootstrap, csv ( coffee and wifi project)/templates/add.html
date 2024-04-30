@@ -10,8 +10,20 @@
       <h1>Add a new cafe into the database</h1>
 
       <!-- This is where your WTForm will go -->
+      <form method="POST" action="{{url_for('add_cafe')}}" novalidate>
+        {{ form.csrf_token }}
+        <p>{{ form.name.label }} <br> {{ form.name }}</p>
+    
+        <p>{{ form.location.label }} <br> {{ form.location}}</p>
+        <p>{{ form.open_time.label }} <br> {{ form.open_time}}</p>
+        <p>{{ form.close_time.label }} <br> {{ form.close_time}}</p>
+        <p>{{ form.coffee.label }} <br> {{ form.coffee}}</p>
+        <p>{{ form.wifi.label }} <br> {{ form.wifi}}</p>
+        <p>{{ form.power.label }} <br> {{ form.power}}</p>
+        {{ form.submit}}
+        </form>
 
-	  <p class="space-above"><a href="#">See all cafes</a></p>
+	  <p class="space-above"><a href="/cafes">See all cafes</a></p>
 
     </div>
   </div>

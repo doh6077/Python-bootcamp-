@@ -53,8 +53,8 @@ def home():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        f = open("cafe-data.csv", "a")
-        f.write(f"{form.name},{form.location},{form.open_time},{form.close_time},{form.coffee},{form.wifi}, {form.power}")
+        f = open("cafe-data.csv", "a", encoding='utf8')
+        f.write(f"{form.name.data},{form.location.data},{form.open_time.data},{form.close_time.data},{form.coffee.data},{form.wifi.data}, {form.power.data}")
         f.close()
     # Exercise:
     # Make the form write a new row into cafe-data.csv
@@ -66,6 +66,7 @@ def add_cafe():
 def cafes():
     with open('cafe-data.csv', newline='', encoding='utf-8') as csv_file:
         csv_data = csv.reader(csv_file, delimiter=',')
+        next(csv_data)
         list_of_rows = []
         for row in csv_data:
             list_of_rows.append(row)
