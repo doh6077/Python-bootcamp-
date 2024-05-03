@@ -74,12 +74,24 @@ def add():
     else:
         return render_template("add.html", form=form)
     
-@app.route("/edit/<id>",methods=['GET','POST'])
+@app.route("/edit/<id>", methods=['GET', 'POST'])
 def edit_rate(id):
     book = Book.query.filter_by(id=id).first()
-    return render_template("edit.html", book=book)
+    form = BookForm(obj=book)
+    if form.validate_on_submit():
+        book.rating = form.rating.data
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template("edit.html", book=book, form=form)
 
+@app.route("/delete/<id>",methods=['GET','POST'])
+def delete(id):
+        book_to_delete = Book.query.get(id)
+        db.session.delete(book_to_delete)
+        db.session.commit()
+        return redirect(url_for("home"))  # Redirect to the home page
 
+    
 
 
 if __name__ == "__main__":
