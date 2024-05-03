@@ -70,9 +70,16 @@ def add():
         new_book = Book(title=book["title"], author=book["author"], rating=book["rating"])
         db.session.add(new_book)
         db.session.commit()
-        return url_for("home")
+        return redirect(url_for("home"))  # Redirect to the home page
+    else:
+        return render_template("add.html", form=form)
+    
+@app.route("/edit/<id>",methods=['GET','POST'])
+def edit_rate(id):
+    book = Book.query.filter_by(id=id).first()
+    return render_template("edit.html", book=book)
 
-    return render_template("add.html", form=form)
+
 
 
 if __name__ == "__main__":
