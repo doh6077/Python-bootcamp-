@@ -27,6 +27,7 @@ db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
 
+
 # Cafe TABLE Configuration
 class Cafe(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -46,20 +47,54 @@ with app.app_context():
     db.create_all()
 
 
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
 # HTTP GET - Read Record
-@app.route("/random", methods=["GET"])
+# HTTP GET - Read Record
+@app.route("/random")
 def get_random_cafe():
-  all_cafes = db.session.query(Cafe).all()
-  random_cafe = random.choice(all_cafes)
-  return jsonify(cafe={"can_take_calls"=random_cafe.can_take_calls, "coffee_price" =random_cafe.coffee_price, "has_sockets" = random_cafe.has_sockets, "has_toilet" = random_cafe.has_toilet, "has_wifi" = random_cafe.has_wifi, "id"= random_cafe.id, "img_url" = random_cafe.img_url, "location" = random_cafe.location, "map_url" = random_cafe.map_url, "name" = random_cafe.name, "seats" = random_cafe.seats }
-                 )
+    cafes = db.session.query(Cafe).all()
+    print("this is length", cafes)
+    random_cafe = random.choice(cafes)
+    return jsonify(cafe={
+        "id": random_cafe.id,
+        "name": random_cafe.name,
+        "map_url": random_cafe.map_url,
+        "img_url": random_cafe.img_url,
+        "location": random_cafe.location,
+        "seats": random_cafe.seats,
+        "has_toilet": random_cafe.has_toilet,
+        "has_wifi": random_cafe.has_wifi,
+        "has_sockets": random_cafe.has_sockets,
+        "can_take_calls": random_cafe.can_take_calls,
+        "coffee_price": random_cafe.coffee_price,
+    })
 
-
+@app.route("/all")
+def get_all():
+    cafes_all=[]
+    cafes = db.session.query(Cafe).all()
+    for i in cafes:
+        cafe = {
+        "id": i.id,
+        "name": i.name,
+        "map_url": i.map_url,
+        "img_url": i.img_url,
+        "location": i.location,
+        "seats": i.seats,
+        "has_toilet": i.has_toilet,
+        "has_wifi": i.has_wifi,
+        "has_sockets": i.has_sockets,
+        "can_take_calls": i.can_take_calls,
+        "coffee_price": i.coffee_price,
+        }
+        cafes_all.append(cafe)
+    
+    return jsonify(cafes_all)
 # HTTP POST - Create Record
 
 # HTTP PUT/PATCH - Update Record
