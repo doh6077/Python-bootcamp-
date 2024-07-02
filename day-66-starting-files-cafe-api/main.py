@@ -23,8 +23,8 @@ class Base(DeclarativeBase):
     pass
 # Connect to Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
-db = SQLAlchemy(model_class=Base)
-db.init_app(app)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 
 
@@ -95,11 +95,34 @@ def get_all():
         cafes_all.append(cafe)
     
     return jsonify(cafes_all)
+
+@app.route("/serach/<location>", methods=['GET','POST'])
+def search(location):
+    cafes = Cafe.query.filter_by(location=location)
+    cafes_all=[]
+    for i in cafes:
+        cafe = {
+        "id": i.id,
+        "name": i.name,
+        "map_url": i.map_url,
+        "img_url": i.img_url,
+        "location": i.location,
+        "seats": i.seats,
+        "has_toilet": i.has_toilet,
+        "has_wifi": i.has_wifi,
+        "has_sockets": i.has_sockets,
+        "can_take_calls": i.can_take_calls,
+        "coffee_price": i.coffee_price,
+        }
+        cafes_all.append(cafe)
+    
+    return jsonify(cafes_all)
 # HTTP POST - Create Record
 
 # HTTP PUT/PATCH - Update Record
 
 # HTTP DELETE - Delete Record
+
 
 
 if __name__ == '__main__':
