@@ -48,13 +48,19 @@ def home():
 def register():
     if request.method =="POST":
         password = generate_password_hash(request.form['password'], method='pbkdf2', salt_length=8)
-        new_info = User(name=request.form['name'],
-                        email=request.form['email'],
-                        password=password)
-        print(password)
-        db.session.add(new_info)
-        db.session.commit()
-        return redirect(url_for('secrets'))
+        email= request.form['email']
+        # check database to check if the email already exists 
+        user = User.query.filter_by(email=email).first()
+        if user == None:
+            new_info = User(name=request.form['name'],
+                            email= email,
+                            password=password)
+            
+            db.session.add(new_info)
+            db.session.commit()
+            return redirect(url_for('secrets'))
+        else: 
+            return render_template("login.html", error = "You've already signed up for that email, log in instead.")
 
     return render_template("register.html")
 
