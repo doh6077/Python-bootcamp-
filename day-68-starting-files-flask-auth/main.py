@@ -24,7 +24,7 @@ login_manager.init_app(app)
     
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.query.get(int(user_id))
 
 
 # CREATE TABLE IN DB
@@ -66,12 +66,17 @@ def login():
         password = request.form['password']
         email=request.form['email']
         user = User.query.filter_by(email=email).first()
+        
+        if user == None:
+            error = 'Invalid credentials'
+            return render_template("login.html", error = 'Invalid credentials')
 
-        if check_password_hash(user.password,password):
-            login_user(user)
-            print("The login is successfull")
-            return redirect(url_for('secrets'))
-                        
+        else: 
+            if check_password_hash(user.password,password):
+                login_user(user)
+                
+                return redirect(url_for('secrets'))
+                            
     return render_template("login.html")
 
 
@@ -82,7 +87,8 @@ def secrets():
 
 @app.route('/logout')
 def logout():
-    pass
+    logout_user()
+    return redirect(url_for('home'))
 
 
 @app.route('/download')
