@@ -68,7 +68,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user == None:
-            error = 'Invalid credentials'
+            
             return render_template("login.html", error = 'Invalid credentials')
 
         else: 
@@ -76,6 +76,10 @@ def login():
                 login_user(user)
                 
                 return redirect(url_for('secrets'))
+            else:
+
+                error = 'password incorrect, please try again'
+                return render_template("login.html", error = error)
                             
     return render_template("login.html")
 
