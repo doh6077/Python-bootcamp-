@@ -19,15 +19,21 @@ db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 login_manager.init_app(app)
 
+
+
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
+
 # CREATE TABLE IN DB
-class User(db.Model):
+class User(UserMixin,db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True)
     password: Mapped[str] = mapped_column(String(100))
     name: Mapped[str] = mapped_column(String(1000))
+ 
  
 with app.app_context():
     db.create_all()
@@ -53,13 +59,23 @@ def register():
     return render_template("register.html")
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET','POST'])
 def login():
+    if request.method == 'POST':
+       
+        password = request.form['password']
+        email=request.form['email']
+        user = User.query.filter_by(email=email).first()
+
+        if check_password_hash(user.password,password):
+            login_user(user)
+            print("The login is successfull")
+            return redirect(url_for('secrets'))
+                        
     return render_template("login.html")
 
 
 @app.route('/secrets')
-@login_required
 def secrets():
     return render_template("secrets.html")
 
@@ -70,6 +86,7 @@ def logout():
 
 
 @app.route('/download')
+@login_required
 def download():
     return app.send_static_file('files/cheat_sheet.pdf')
 
