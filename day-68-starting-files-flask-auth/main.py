@@ -62,7 +62,8 @@ def register():
         else: 
             return render_template("login.html", error = "You've already signed up for that email, log in instead.")
 
-    return render_template("register.html")
+# Passing True or False if the user is authenticated. 
+    return render_template("register.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -87,12 +88,12 @@ def login():
                 error = 'password incorrect, please try again'
                 return render_template("login.html", error = error)
                             
-    return render_template("login.html")
+    return render_template("login.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/secrets')
 def secrets():
-    return render_template("secrets.html")
+    return render_template("secrets.html", name=current_user.name, logged_in=True)
 
 
 @app.route('/logout')
