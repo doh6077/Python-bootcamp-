@@ -24,6 +24,12 @@ include "header.html" %}
       <!-- TODO: add a flash message here for users registering twice -->
       <div class="col-lg-8 col-md-10 mx-auto">
         <!--TODO: render login form here-->
+        <form method="POST" action="/login">
+          {{ form.csrf_token }}
+          {{ form.email.label }} {{ form.email(size=30) }}
+          {{ form.password.label }} {{ form.password(size=30) }}
+          {{ form.submit}}
+          </form>
       </div>
     </div>
   </div>
