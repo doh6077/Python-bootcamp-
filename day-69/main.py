@@ -77,6 +77,7 @@ def load_user(user_id):
 @app.route('/register', methods=["GET", "POST"])
 def register():
     form = RegisterForm()
+    loginform = LoginForm()
     if form.validate_on_submit():
 
         hash_and_salted_password = generate_password_hash(
@@ -84,15 +85,23 @@ def register():
             method='pbkdf2:sha256',
             salt_length=8
         )
-        new_user = User(
-            email=form.email.data,
-            name=form.name.data,
-            password=hash_and_salted_password,
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        
-        return redirect(url_for("get_all_posts"))
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+        if  user== None:
+            print("This is {user}")
+
+            new_user = User(
+                email=email,
+                name=form.name.data,
+                password=hash_and_salted_password,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            return redirect(url_for("get_all_posts"))
+        else:
+            error = "You've already signed up for that email, log in instead."
+            return render_template('login.html', error=error, form= loginform)
 
     return render_template("register.html", form=form)
 
@@ -100,14 +109,16 @@ def register():
 # TODO: Retrieve a user from the database based on their email. 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    error = None
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
         email= form.email.data
         user = User.query.filter_by(email=email).first()
         login_user(user)
+        flash('You were successfully logged in')
         return redirect(url_for("get_all_posts"))
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form, error = error)
 
 
 @app.route('/logout')
