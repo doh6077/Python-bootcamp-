@@ -201,6 +201,7 @@ def about():
 
 @app.route("/contact")
 def contact():
+    # this is for checking 
     return render_template("contact.html")
 
 
