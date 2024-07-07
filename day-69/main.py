@@ -106,23 +106,22 @@ def register():
     return render_template("register.html", form=form)
 
 
-# TODO: Retrieve a user from the database based on their email. 
+# TODO: Retrieve a user from the database based on their email.
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    error = None
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
-        email= form.email.data
+        email = form.email.data
         user = User.query.filter_by(email=email).first()
-        if check_password_hash(user.password,password):
+        if user and check_password_hash(user.password, password):
             login_user(user)
-    
-            flash('You were successfully logged in')
+            flash('You were successfully logged in', 'success')
             return redirect(url_for("get_all_posts"))
         else:
-            
-    return render_template("login.html", form=form, error = error)
+            flash('Invalid email or password. Please try again.', 'error')
+    return render_template("login.html", form=form)
+
 
 
 @app.route('/logout')
