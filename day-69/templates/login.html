@@ -28,6 +28,13 @@ include "header.html" %}
       <div class="col-lg-8 col-md-10 mx-auto">
         <!--TODO: render login form here-->
         <form method="POST" action="/login">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+             <p>{{ message }}</p>  
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
           {{ form.csrf_token }}
           {{ form.email.label }} {{ form.email(size=30) }}
           {{ form.password.label }} {{ form.password(size=30) }}
