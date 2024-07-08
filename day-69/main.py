@@ -12,7 +12,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 # Import your forms from the forms.py
 from forms import CreatePostForm, RegisterForm, LoginForm
-
+import os
 
 '''
 Make sure the required packages are installed: 
@@ -40,6 +40,7 @@ class Base(DeclarativeBase):
     pass
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(model_class=Base)
+
 db.init_app(app)
 
 
@@ -70,7 +71,9 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 with app.app_context():
-    db.create_all()
+    if not os.path.exists('sqlite:///posts.db'):
+        db.create_all()
+        print("Database created!")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
