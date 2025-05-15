@@ -13,7 +13,6 @@ response = requests.get("https://www.audible.com/search?keywords=book&node=18573
 soup = BeautifulSoup(response.text, 'html.parser')
 books = soup.find_all(class_="bc-link bc-color-link")
 book_names = [book.getText().strip() for book in books if len(book.getText().strip()) > 1]
-print(book_names)
 
 
 # Set up twilio to send an notication of the list of books 
@@ -23,8 +22,11 @@ client = Client(account_sid, auth_token)
 
 phone_number = os.environ["PHONE_NUMBER"]
 twilio_phone_number = os.environ["TWILIO_PHONE_NUMBER"]
+
+date = datetime.datetime.now().strftime("%c")
+
 message = client.messages.create(
-    body=,
+    body= f"This is the book list of {date} {book_names}",
     from_=twilio_phone_number,
     to=phone_number,
 )
