@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from smtplib import SMTP
 import os 
 
-response = requests.get('https://appbrewery.github.io/instant_pot/')
+URL = 'https://appbrewery.github.io/instant_pot/'
+response = requests.get(URL)
 
 web_page = response.text
 
@@ -23,12 +24,15 @@ password = os.getenv("EMAIL_PASSWORD")
 
 s = SMTP(os.getenv("SMTP_ADDRESS"))
 
-s.starttls()
-# Authentication
-s.login(email, password)
-# message to be sent
-message = "Message_you_need_to_send"
-# sending the mail
-s.sendmail(email,email,message)
-# terminating the session
-s.quit()
+if price < 100:
+    s.starttls()
+    # Authentication
+    s.login(email, password)
+    # message to be sent
+    message = f"The price has dropped! Purchase link: {URL} | Current price: ${price}"
+    # sending the mail
+    s.sendmail(email,email,message)
+    # terminating the session
+    s.quit()
+else:
+    print("The price is not enough low")
