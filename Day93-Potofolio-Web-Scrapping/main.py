@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup
 import requests
 import os
 from dotenv import load_dotenv
+import os
+from twilio.rest import Client
+import datetime 
+
 load_dotenv()  # take environment variables from .env
 
 # Scraping Audible website 
@@ -10,3 +14,19 @@ soup = BeautifulSoup(response.text, 'html.parser')
 books = soup.find_all(class_="bc-link bc-color-link")
 book_names = [book.getText().strip() for book in books if len(book.getText().strip()) > 1]
 print(book_names)
+
+
+# Set up twilio to send an notication of the list of books 
+account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+client = Client(account_sid, auth_token)
+
+phone_number = os.environ["PHONE_NUMBER"]
+twilio_phone_number = os.environ["TWILIO_PHONE_NUMBER"]
+message = client.messages.create(
+    body=,
+    from_=twilio_phone_number,
+    to=phone_number,
+)
+
+print(message.body)
