@@ -50,3 +50,13 @@ if follow_btn != None:
     print("follow button has been found")
 # follow_btn.click()
 
+
+# Step 4: do the step3 for multiple jobs 
+jobs = driver.find_elements(By.CSS_SELECTOR,'.job-card-list__title--link')
+for job in jobs: 
+    print(job)
+    job.click()
+    print(f"job {job.text} has been clicked")
+    time.sleep(2)
+
+driver.quit()
