@@ -9,5 +9,5 @@ from dotenv import load_dotenv
 load_dotenv()
 print("TWITTER_USERNAME:", os.getenv('TWITTER_USERNAME'))
 bot = Bot()
-# bot.get_internet_speed()
-bot.tweet_at_provider()
+bot.get_internet_speed()
+# bot.tweet_at_provider()

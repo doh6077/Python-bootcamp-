@@ -33,7 +33,7 @@ class InternetSpeedTwitterBot:
             start_btn.click()
             print("Start button has been clicked")
             sleep(120)
-            close_btn = self.speed_driver.find_element(By.CLASS_NAME,'close-btn')
+            close_btn = self.speed_driver.find_element(By.XPATH,'//*[@id="container"]/div[1]/div[3]/div/div/div/div[2]/div[2]/div/div[4]/div/div[8]/div/div/div[2]/a')
             
             if close_btn == None:
                 print("close button can't be found")
@@ -44,14 +44,14 @@ class InternetSpeedTwitterBot:
             sleep(5)
 
             result_down = self.speed_driver.find_element(By.CLASS_NAME,'download-speed')
-            self.down = result_down.text()
+            self.down = result_down.text
             print(f"down: {self.down}")
 
             result_up = self.speed_driver.find_element(By.CLASS_NAME,'upload-speed')
-            self.up = result_up.text()
+            self.up = result_up.text
             print(f"up: {self.up}")
 
-            self.drive.quit()
+            self.speed_driver.quit()
 
         else:
             print("start button can't be found")
