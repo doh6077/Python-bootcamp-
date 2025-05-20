@@ -4,6 +4,7 @@ import time
 import os 
 from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
+from selenium.common.exceptions import NoSuchElementException
 load_dotenv()
 
 url ="https://www.linkedin.com/jobs/collections/easy-apply/?currentJobId=4220162457&discover=recommended&discoveryOrigin=JOBS_HOME_JYMBII"
@@ -39,3 +40,13 @@ sign_in = driver.find_element(By.CLASS_NAME, 'from__button--floating')
 print(sign_in.text)
 sign_in.click()
 time.sleep(5)
+
+# Step 3: Save job and follow the company 
+
+save_btn = driver.find_element(By.CLASS_NAME,'jobs-save-button__text')
+save_btn.click()
+follow_btn = driver.find_element(By.CSS_SELECTOR, ".artdeco-button.artdeco-button--secondary.ml5")
+if follow_btn != None:
+    print("follow button has been found")
+# follow_btn.click()
+
